@@ -9,9 +9,11 @@ The kit includes a homepage, searchable writing archive, topic filters, project 
 
 Workshop access: [shared GitHub template](https://github.com/DTABaker/tigerai-blog-template) · [public workshop guide](https://dtabaker.github.io/tigerai-blog-template/workshop/). Facilitators should verify these links open signed out before each event. After publishing your own copy, continue from **Workshop on your own site**.
 
+The shared kit has completed a [GitHub Pages fresh-copy rehearsal](docs/REHEARSAL.md), including settings edits, a post, and failed-build recovery.
+
 ## Your first session
 
-1. Open the GitHub template link supplied by your facilitator. Choose **Use this template → Create a new repository**.
+1. Sign in to GitHub, then open the [shared template](https://github.com/DTABaker/tigerai-blog-template). Choose **Use this template → Create a new repository**. You can also use the [direct create-a-copy link](https://github.com/DTABaker/tigerai-blog-template/generate); GitHub will ask you to sign in if needed.
 2. Create a public repository named `professional-blog`. If that name already exists in your account, choose a new name such as `professional-blog-workshop`. This project-site route gives the workshop its own repository and address; keep any existing personal blog unchanged.
 3. In your new repository, open **Settings → Pages** and select **GitHub Actions** as the publishing source.
 4. Open **Actions → Deploy blog → Run workflow**, select `main`, and start the workflow. After it succeeds, open **Settings → Pages → Visit site**.

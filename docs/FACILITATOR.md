@@ -6,6 +6,8 @@ This guide describes preparation you still need to perform. The presence of thes
 
 Shared access addresses for this kit are [the GitHub template](https://github.com/DTABaker/tigerai-blog-template) and [the public workshop guide](https://dtabaker.github.io/tigerai-blog-template/workshop/). Verify both signed out and record the deployment evidence below before distributing them. The recommended live workshop route is a new project repository named `professional-blog` (or another unused name), preserving existing personal sites.
 
+A [dated publication and rehearsal record](REHEARSAL.md) is available for the shared kit. Recheck the student links and your event logistics before each session.
+
 ## Prepare the shared template before the session
 
 ### 1. Create a standalone repository

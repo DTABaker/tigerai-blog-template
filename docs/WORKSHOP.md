@@ -31,7 +31,7 @@ Choose a project or experience you can discuss publicly. It can be a class exerc
 
 ### 1. Create your own repository
 
-Open the facilitator's template repository. Select **Use this template → Create a new repository**. Select your own account as the owner and choose **Public**. You only need the default branch. [GitHub's template instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
+Sign in to GitHub and open the [shared template repository](https://github.com/DTABaker/tigerai-blog-template). Select **Use this template → Create a new repository**. If you cannot find that control, use the [direct create-a-copy link](https://github.com/DTABaker/tigerai-blog-template/generate) after signing in. Select your own account as the owner and choose **Public**. You only need the default branch. [GitHub's template instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
 
 For the live workshop, name the repository **`professional-blog`**. If that name already exists in your account, choose a new name such as `professional-blog-workshop`. The resulting project site normally lives at `https://YOUR-USERNAME.github.io/professional-blog/`. Replace `YOUR-USERNAME` with your actual lowercase GitHub username, and keep your chosen repository name in the address. Use **Settings → Pages → Visit site** for the authoritative address.
 
