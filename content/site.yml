@@ -1,0 +1,23 @@
+# Edit the text on the RIGHT of each colon. Keep the key names on the left.
+# Easier option: use your published site's /setup/ page to download this file.
+# Replace the existing content/site.yml in GitHub; downloading alone changes nothing online.
+name: "Your Name"
+initials: "YN"
+headline: "Your professional focus, in a few clear words."
+description: "Introduce yourself in two or three sentences. Explain what you study or work on, the questions that interest you, and what readers will find here. Replace these instructions with your own accurate introduction."
+role: "Your field / your focus"
+# Optional fields: leave the quotes empty to hide them.
+location: ""
+email: ""
+# Leave url empty for automatic GitHub Pages configuration.
+# If you set it, use your complete live URL, including a project path if needed.
+url: ""
+# Use complete https:// profile URLs, not usernames.
+github: ""
+linkedin: ""
+# Optional: upload a PDF first, then use /assets/uploads/resume.pdf here.
+resumePdf: ""
+# Choose exactly one: teal, blue, plum.
+accent: "teal"
+# Keep true while learning. Change to false only after the launch checklist.
+templateMode: true

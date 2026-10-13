@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.build-stage-*/
+.build-backup-*/
+.check-workspace-*/
+.DS_Store
+Thumbs.db
+*.log
