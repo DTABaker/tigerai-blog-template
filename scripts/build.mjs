@@ -2,7 +2,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readFile, writeFile, readdir, mkdir, stat, lstat, copyFile, rename, rm, access } from 'node:fs/promises';
 import MarkdownIt from 'markdown-it';
-import { parseDocument } from 'yaml';
+import { LineCounter, parseDocument } from 'yaml';
 import { escapeHtml, makeRenderer } from './render.mjs';
 import { renderWorkshop } from './workshop-page.mjs';
 import { renderSetup } from './setup-page.mjs';
@@ -14,16 +14,31 @@ const backup = path.join(root, `.build-backup-${process.pid}-${Date.now()}`);
 const e = escapeHtml;
 const knownKeys = new Set(['name', 'initials', 'headline', 'description', 'role', 'location', 'email', 'url', 'github', 'linkedin', 'resumePdf', 'accent', 'templateMode']);
 const entryKeys = new Set(['title', 'description', 'date', 'tags', 'featured', 'draft', 'template']);
+let outputReplaced = false;
 
-function fail(file, field, message) {
-  throw new Error(`${file}${field ? ` → ${field}` : ''}: ${message}`);
+function fail(file, field, message, location = {}) {
+  const error = new Error(`${file}${field ? ` → ${field}` : ''}${location.line ? ` (line ${location.line}, column ${location.column})` : ''}: ${message}`);
+  Object.assign(error, { file, ...location });
+  throw error;
 }
 
-function yaml(text, filename) {
-  const document = parseDocument(text, { uniqueKeys: true, prettyErrors: false, strict: true });
-  if (document.errors.length) fail(filename, 'YAML', `${document.errors[0].message}. Check indentation, quotes, and colons.`);
+function yaml(text, filename, lineOffset = 0) {
+  const lineCounter = new LineCounter();
+  const document = parseDocument(text, { uniqueKeys: true, prettyErrors: false, strict: true, lineCounter });
+  if (document.errors.length) {
+    const problem = document.errors[0];
+    const position = lineCounter.linePos(problem.pos[0]);
+    // Parser excerpts can contain personal settings. Report location and repair instructions only.
+    const reason = problem.code === 'DUPLICATE_KEY' ? 'A setting name appears more than once.'
+      : /Missing closing ["']quote/.test(problem.message) ? 'A quotation mark is missing, or a quoted value continues on an unindented line.'
+      : 'The settings format has a punctuation or indentation problem.';
+    const repair = filename === 'content/site.yml'
+      ? 'Keep each quoted value on one line with an opening and closing quotation mark. The easiest repair is to use Personalize your site (/setup/) on your latest working site, check every field, and download fresh settings; then replace the complete contents of content/site.yml. If your site has not published yet, use the workshop demo studio and fill in your own details.'
+      : 'Keep quoted titles and descriptions on one line. Check that each setting has a colon and that the opening and closing --- lines are present. You can use the post builder in Personalize your site (/setup/) to make a fresh file.';
+    fail(filename, 'YAML', `${reason} ${repair}`, { line: position.line + lineOffset, column: position.col });
+  }
   let value;
-  try { value = document.toJS({ maxAliasCount: 20 }); } catch (error) { fail(filename, 'YAML', error.message); }
+  try { value = document.toJS({ maxAliasCount: 20 }); } catch { fail(filename, 'YAML', 'The settings contain unsupported references. Use plain text values in quotation marks; the setup studio can create a fresh file.'); }
   if (!value || typeof value !== 'object' || Array.isArray(value)) fail(filename, 'YAML', 'Expected named settings, one per line.');
   return value;
 }
@@ -73,8 +88,30 @@ async function source(filename) {
   catch (error) { if (error.code === 'ENOENT') fail(filename, '', 'File is missing. Restore it or add it before building.'); throw error; }
 }
 
+async function checkSettingsLocation() {
+  const misplaced = [];
+  const excludedFolders = new Set(['node_modules', 'dist']);
+  const settingsName = /^site(?:[ _-]*(?:\(\d+\)|\d+|copy(?:[ _-]*\(\d+\))?))?\.ya?ml(?:\.txt)?$/i;
+  async function walk(folder = '') {
+    const entries = await readdir(path.join(root, folder), { withFileTypes: true });
+    for (const entry of entries) {
+      const filename = path.posix.join(folder, entry.name);
+      if ((entry.isFile() || entry.isSymbolicLink()) && settingsName.test(entry.name) && filename !== 'content/site.yml') misplaced.push(filename);
+      // Search ordinary folders, including accidental outer folders. Dirents do not follow symlinks.
+      if (entry.isDirectory() && !entry.isSymbolicLink() && !entry.name.startsWith('.') && !excludedFolders.has(entry.name.toLowerCase())) await walk(filename);
+    }
+  }
+  await walk();
+  if (misplaced.length) {
+    misplaced.sort();
+    fail(misplaced[0], 'settings file location', `Found settings outside the one supported location: ${misplaced.map(filename => `"${filename}"`).join(', ')}. The blog reads only content/site.yml. Open the file with the settings you want, copy all of its text into content/site.yml, and verify the saved text there. Then remove the extra settings file(s) listed above. Keep the filename exactly site.yml inside the content folder; do not keep a numbered download such as site (1).yml. No settings files were changed automatically.`);
+  }
+  if (!(await exists(path.join(root, 'content/site.yml')))) fail('content/site.yml', 'settings file location', 'The required settings file is missing. In GitHub, open the content folder and create a file named exactly site.yml, then paste the complete settings from your downloaded file or restore the supplied template. The final path must be content/site.yml; a file at the repository top level will not work.');
+}
+
 async function readSite() {
   const filename = 'content/site.yml';
+  await checkSettingsLocation();
   const data = yaml(await source(filename), filename);
   for (const key of Object.keys(data)) if (!knownKeys.has(key)) fail(filename, key, 'Unknown setting. Check the spelling against the supplied site.yml template.');
   const site = {};
@@ -155,7 +192,7 @@ async function readCollection(collection, href, today, includeTemplates) {
     const text = await source(filename);
     const match = /^---\n([\s\S]*?)\n---(?:\n|$)([\s\S]*)$/.exec(text);
     if (!match) fail(filename, 'front matter', 'Start with a --- line, add the title/date/settings, then close with another --- line.');
-    const data = yaml(match[1], filename);
+    const data = yaml(match[1], filename, 1);
     for (const key of Object.keys(data)) if (!entryKeys.has(key)) fail(filename, key, 'Unknown front matter field. Use title, description, date, tags, featured, draft, or template.');
     const entry = { collection, slug, title: textField(data.title, filename, 'title', { required: true }), description: textField(data.description, filename, 'description', { required: true }), date: dateField(data.date, filename) };
     if (!Array.isArray(data.tags) || data.tags.some(tag => typeof tag !== 'string' || !tag.trim())) fail(filename, 'tags', 'Use a list of quoted topics, such as ["Learning", "Projects"], or [].');
@@ -300,7 +337,7 @@ async function build() {
     if (!(await lstat(destination)).isDirectory() || (await lstat(destination)).isSymbolicLink()) fail('dist', '', 'Expected a regular build directory. Move the conflicting file or link before building.');
     await renameWithRetry(destination, backup);
   }
-  try { await renameWithRetry(stage, destination); }
+  try { await renameWithRetry(stage, destination); outputReplaced = true; }
   catch (error) { if (previousExists) await renameWithRetry(backup, destination); throw error; }
   if (previousExists) await cleanGeneratedDirectory(backup);
   console.log(`Built ${outputs.size} generated files in dist/ (${posts.length} posts, ${projects.length} projects).`);
@@ -310,9 +347,20 @@ async function build() {
   if (site.templateMode) console.log('Template mode is on: search engines are asked not to index this starter. Turn it off after replacing the placeholders.');
 }
 
+const previousOutputExists = (await lstat(destination).catch(() => null))?.isDirectory() && await exists(path.join(destination, 'index.html'));
 try { await build(); }
 catch (error) {
   if (await exists(stage)) await cleanGeneratedDirectory(stage);
-  console.error(`\nBuild stopped. ${error.message}\nYour previous successful dist/ has been kept. Fix the setting above, then run npm run build again.\n`);
+  if (process.env.GITHUB_ACTIONS === 'true') {
+    const escapeData = value => String(value).replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
+    const escapeProperty = value => escapeData(value).replace(/:/g, '%3A').replace(/,/g, '%2C');
+    const properties = ['title=Blog needs one correction'];
+    if (error.file) properties.push(`file=${escapeProperty(error.file)}`, `line=${error.line || 1}`, `col=${error.column || 1}`);
+    console.error(`::error ${properties.join(',')}::${escapeData(error.message)}`);
+  }
+  const outcome = outputReplaced ? 'The new dist/ output was created, but final cleanup did not finish.'
+    : previousOutputExists && await exists(path.join(destination, 'index.html')) ? 'Your existing dist/ output has been kept.'
+    : 'No new dist/ output was published. If a website is already live, this failed build does not replace it.';
+  console.error(`\nBuild stopped. ${error.message}\n${outcome}\nFix the item above and commit the correction in GitHub to try again. For a local preview, run npm run build again.\n`);
   process.exitCode = 1;
 }

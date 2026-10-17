@@ -39,7 +39,7 @@ Pay particular attention to **`.github/workflows/pages.yml`**. A file picker may
 
 In **Settings → General**, enable **Template repository**. This requires repository administration access. [GitHub's template-setting instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository)
 
-In **Settings → Pages**, select **GitHub Actions** as the source. Run **Actions → Deploy blog → Run workflow** on `main`. Open the completed run and then **Settings → Pages → Visit site**. Keep `templateMode: true` in the shared kit; its default content should remain instructional.
+In **Settings → Pages → Build and deployment**, set **Source: GitHub Actions**. Do not select **Deploy from a branch** or `main / (root)`, and do not add a suggested starter workflow; the supplied **Deploy blog** workflow already builds the site. Run **Actions → Deploy blog → Run workflow** on `main`. Check its **Check GitHub Pages setup** step and wait for the full run to succeed, then open **Settings → Pages → Visit site**. A separate automatically generated **pages build and deployment** run is not evidence that Deploy blog passed. Keep `templateMode: true` in the shared kit; its default content should remain instructional.
 
 Record the actual addresses in your own event notes:
 
@@ -57,11 +57,13 @@ Do not distribute placeholder URLs as if they were live destinations. A local pr
 Make a fresh copy with **Use this template** in a new, separate project repository. Use `professional-blog` or another unused name. Work through the [participant guide](WORKSHOP.md) in a browser. Do not change an existing personal blog, its repository, or its Pages settings.
 
 - Confirm a new copy can deploy after Pages is set to GitHub Actions.
+- In the separate rehearsal repository, try the incorrect **Deploy from a branch** source. Confirm **Check GitHub Pages setup** stops Deploy blog with actionable instructions; restore **GitHub Actions**, manually run Deploy blog, and verify recovery. Do not perform this test on an existing personal blog.
 - Confirm a project-site address includes its repository path and that navigation and images still work.
 - Continue on the fresh copy's own live **Workshop** page and personalize its homepage with a downloaded setup file.
 - Wait for the deployment, reload that copy's `/setup/`, and confirm it contains the new values. Check that updating one field preserves the others.
 - Publish a real test post, then check the archive search, tags, and post page.
 - Try an intentional, harmless settings typo; confirm the build message identifies it, then repair the file.
+- Upload a settings download one folder too high, and try a browser-renamed `site (1).yml`. Confirm the build identifies the extra file. Practice preserving the desired complete settings in **content/site.yml**, verifying that saved file, and only then removing the mistaken extra. Confirm the final run succeeds.
 - Set the real post to `draft: false` and `template: false`, then switch `templateMode` to `false`. Confirm the real post stays visible and the flagged sample posts and projects disappear from the generated site, feed, and sitemap.
 - Confirm a site without published projects leads readers to its writing and has a usable empty Projects page.
 - Open the site on a phone and with keyboard navigation.
@@ -82,6 +84,7 @@ Fill in this record for the event. Do not mark a check complete using a local bu
 | Required live project-site rehearsal: repository path, navigation, and image links working | Fill in project-site rehearsal URL and result |
 | Generator's root-path regression check | Record command, version, and result; this is local test evidence only |
 | Own-site studio upload, one real post, and launch hiding demonstrated | Record rehearsal date and result |
+| Misplaced settings, renamed download, malformed YAML, and incorrect Pages-source recovery | Record the failing and recovered run URLs/results |
 | Laptop/network/account access checked; source ZIP and guide available | Record result and where backups are held |
 | Plan B and helper contact route | Fill in before the event |
 
@@ -113,11 +116,17 @@ The time blocks total 90 minutes. Keep the first publication simple; students ca
 
 Demonstrate the same small loop each time: **open the right file → change text → preview or review the diff → commit → check Actions → refresh the live page**. Independent edits can be committed while a prior build runs; wait for the latest run at each checkpoint rather than after every file. Do not make a participant pause for an uploaded draft's deployment before opening it to write.
 
-Say the file path aloud and keep the browser's repository owner visible. Beginners can accidentally edit the instructor's repository or upload a file one folder too high. Explain that a downloaded file is not yet saved to GitHub and a commit is not yet a finished deployment.
+Say the file path aloud and keep the browser's repository owner visible. Before a settings upload, show the breadcrumb **repository / content** and the resulting **content/site.yml** path. Compare it with a top-level **site.yml**, which is one folder too high. Show how a repeat download may become **site (1).yml** and must be renamed before upload. Explain that a downloaded file is not yet saved to GitHub and a commit is not yet a finished deployment.
+
+The new checks report problems; they do not move settings files, delete duplicates, repair personal prose, or change repository settings. During recovery, preserve the participant's intended complete settings in the correct file before removing any extra copy. A failed upload may contain more recent work than the currently active file. Do not replace that work with template defaults.
 
 After initial publication, have everyone open **Workshop** on their own live site. The studio's settings come from whichever site serves it. For later updates, have participants reload their own `/setup/` after the latest deployment and verify their current details. Downloading from the instructor's studio or a stale tab can replace personalized settings with defaults. During launch, demonstrate changing only `templateMode` with GitHub's pencil editor.
 
 Use the studio as the main route in the live demonstration. Direct YAML edits and copying `templates/post.md` remain useful alternatives in the guide, but teaching both routes at once adds unnecessary steps. Source sample files may remain in the repository: `templateMode: false` hides posts and projects marked `template: true` while leaving their public source files available. Deleting them is optional follow-up cleanup.
+
+For a direct settings edit, demonstrate one short quoted line. Do not paste an AI response containing commentary or new paragraphs into a quoted headline. The studio handles embedded quotes and line breaks. If the latest build failed, the live studio still reflects the last successful deployment, so review and restore all intended values before downloading a replacement.
+
+Hyphenated GitHub usernames work normally. Participants should copy their address from **Settings → Pages → Visit site**, preserving hyphens and the project path's case. Keep `url: ""` for the automatically supplied Pages address.
 
 Use a deliberately modest writing example. A well-explained lesson from a course can be useful. Avoid modeling fabricated metrics, titles, testimonials, or research outcomes just to make the demo look impressive.
 
@@ -125,7 +134,7 @@ Use a deliberately modest writing example. A well-explained lesson from a course
 
 If sign-in or account verification blocks a participant, let them prepare their introduction and first post in a private document while a helper resolves access. If GitHub is unavailable, demonstrate the prepared site and practice the text changes locally in that document; publication remains unfinished until the participant can use GitHub.
 
-If a build fails, ask for the exact **first useful error message** and the file path. Fix one issue at a time. Use [troubleshooting](TROUBLESHOOTING.md); do not ask the participant to recreate the repository as a first response.
+If a build fails, open the **latest Deploy blog** run for the latest commit and ask for the exact **first useful error message**, failed step, and file path. The Pages check also writes repair instructions in the run summary. Fix one issue at a time. Use [troubleshooting](TROUBLESHOOTING.md); do not ask the participant to recreate the repository as a first response. An earlier template copy will not gain these new checks automatically; use the [existing-copy update guide](TROUBLESHOOTING.md#update-an-existing-copy-with-these-fixes) while preserving its content and uploads.
 
 If time is short, prioritize a live homepage, concise About and Résumé text, and one real post. Defer projects, PDFs, images, and source-file cleanup. Let the participant keep template mode on and finish the checklist afterward if profile prompts remain. Do not ask them to present an unfinished template as a finished professional site. Launch mode hides flagged post/project samples; it does not fix the profile pages for them.
 

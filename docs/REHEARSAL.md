@@ -46,3 +46,21 @@ This task made no writes to `DTABaker/DTABaker.github.io`; its Pages URL, source
 The live rehearsal used a separate project-site path. Root-path behavior passed local regression checks, but no new root user-site deployment was attempted because an existing blog already occupies that address. The root route remains an optional separately rehearsed extension, not the recommended workshop path.
 
 Before each event, use the [facilitator preflight](FACILITATOR.md#event-go-or-no-go-preflight) to recheck access and event logistics. Workflow logs may expire according to GitHub's retention settings.
+
+## Settings and Pages recovery rehearsal — October 17, 2026
+
+The existing separate rehearsal repository was updated and used to exercise the new checks. This was an upgrade and failure-recovery rehearsal of the original template copy, not another newly created account or repository. The shared template kept its instructional content. No writes were made to a participant repository or the existing personal blog.
+
+| Case | Observed result | GitHub evidence |
+| --- | --- | --- |
+| A valid downloaded `site.yml` at the repository top level, with malformed quoted text in `content/site.yml` | Build stopped first with the exact misplaced path and copy–verify–remove instructions. Deployment was skipped. Home, the published test post, and Setup retained their previous SHA-256 hashes. | [Expected settings-location failure](https://github.com/DTABaker/tigerai-blog-rehearsal/actions/runs/39066101424) |
+| Pages temporarily set to **Deploy from a branch**, `main / (root)` | **Check GitHub Pages setup** failed before dependency installation, with numbered steps to select **GitHub Actions** and run **Deploy blog** again. The test restored the correct Pages source afterward. | [Expected Pages-source failure](https://github.com/DTABaker/tigerai-blog-rehearsal/actions/runs/39066178216) |
+| Restore the desired settings, remove the extra copy, and restore GitHub Actions | The first recovery exposed a missing guide in the older copy; the complete guides folder resolved it. Build and deployment then succeeded. The original settings, writing, and uploaded assets were unchanged. | [Successful recovery](https://github.com/DTABaker/tigerai-blog-rehearsal/actions/runs/39066323780) |
+
+The missing-guide check was useful: copying only updated help pages can leave a reference to `REHEARSAL.md` without that file. The [existing-copy update instructions](TROUBLESHOOTING.md#update-an-existing-copy-with-these-fixes) now explicitly require every current `docs/` file when updating the optional help. Updating the six required implementation files does not require replacing personal content or uploads.
+
+Node 24.19.0 checks covered misplaced and browser-renamed settings, a missing canonical file, malformed multiline YAML with line/column reporting, escaped downloaded text, preservation of source and previous output, and safely escaped GitHub annotations. Nine Pages preflight tests covered correct and incorrect sources, missing Pages configuration, denied access, connection/service errors, timeout, unexpected responses, and safe reporting. The unavailable-service cases were simulated; the correct and incorrect Pages sources were exercised live with the workflow's automatic token.
+
+The exact URL shape `https://gloria-obeng.github.io/Tigers-AI-Test/` and the equivalent account-root URL passed generated navigation, asset, canonical, RSS, and sitemap checks. This confirms hyphens do not require a template change; keep the repository path's letter case. The recovered live studio retained the test profile and plum theme, displayed the revised upload instructions, and linked successfully to the misplaced-file recovery section.
+
+Changing the Pages source itself can start GitHub's separate branch-publishing workflow. The unchanged-live-page hash check above applies to the failed content build while Pages was correctly configured, not to intentionally changing the publishing source. Keep all intentional failure tests in a separate rehearsal repository.

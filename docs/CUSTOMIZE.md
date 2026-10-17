@@ -6,6 +6,8 @@ Edit files in your own GitHub repository, commit your changes, and check the lat
 
 All homepage settings live in **`content/site.yml`**. Keep the field names exactly as supplied. **Your own published site's `/setup/` page** offers a form that downloads a complete replacement settings file; you must upload it into `content/` yourself. For later edits, wait for your latest deployment, reload that page, and check its current values before downloading. An instructor's setup page or an old open tab can replace your settings with different or stale values.
 
+Open the **content** folder before **Add file → Upload files**. Rename downloads such as `site (1).yml` to exactly `site.yml` first. A top-level `site.yml` is one folder too high. The updated build reports likely misplaced settings files and stops; it does not merge or delete them. [Recover your intended settings](TROUBLESHOOTING.md#the-build-found-a-misplaced-settings-file) before removing an extra file.
+
 | Field | What to enter |
 | --- | --- |
 | `name` | Your public name, as you want it displayed |
@@ -24,7 +26,9 @@ All homepage settings live in **`content/site.yml`**. Keep the field names exact
 
 The GitHub workflow supplies the detected Pages URL and takes priority over `url`, including when Pages uses a custom domain. For other hosting, if you set `url` manually, use the actual full website URL, including any project path. Do not enter the repository's `github.com` address. Changing this field does not register a domain or configure GitHub Pages. Leave it empty during the workshop.
 
-Keep a space after each colon. Text can be quoted; booleans are the bare words `true` and `false`. Use ordinary straight quotes, not the curly quotation marks a word processor may insert. The form is useful if you need embedded quotation marks or multiline text.
+Hyphens in GitHub usernames are supported. Copy your address from **Settings → Pages → Visit site**, keeping the username's hyphens and the repository path's spelling and letter case. Use **GitHub Actions** as the Pages source; **Deploy from a branch** does not run this generator correctly.
+
+Keep a space after each colon. Text can be quoted; booleans are the bare words `true` and `false`. Use ordinary straight quotes, not the curly quotation marks a word processor may insert. For a simple direct edit, keep each quoted value on one line. Use the studio for embedded quotation marks or multiline text. Do not paste AI explanations, Markdown code fences, or extra paragraphs into the settings file.
 
 Example syntax, with instructional values:
 

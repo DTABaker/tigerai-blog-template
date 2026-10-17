@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "check": "node scripts/check.mjs && node --test scripts/form-validation.test.mjs",
+    "check": "node scripts/check.mjs && node --test scripts/form-validation.test.mjs scripts/check-pages.test.mjs",
     "dev": "npm run build && node scripts/serve.mjs",
     "preview": "node scripts/serve.mjs"
   },

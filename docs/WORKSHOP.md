@@ -35,6 +35,8 @@ Sign in to GitHub and open the [shared template repository](https://github.com/D
 
 For the live workshop, name the repository **`professional-blog`**. If that name already exists in your account, choose a new name such as `professional-blog-workshop`. The resulting project site normally lives at `https://YOUR-USERNAME.github.io/professional-blog/`. Replace `YOUR-USERNAME` with your actual lowercase GitHub username, and keep your chosen repository name in the address. Use **Settings → Pages → Visit site** for the authoritative address.
 
+A hyphen in a username works normally. Keep it: the address shape `https://gloria-obeng.github.io/Tigers-AI-Test/` has the hyphen in the username and the repository name after `.io/`. Copy your own Pages address rather than typing or guessing it, and preserve the repository name's letter case.
+
 This workshop uses a separate project repository even if you do not yet have a personal blog. Keep any existing `YOUR-USERNAME.github.io` repository and its settings unchanged. [GitHub's naming requirements](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)
 
 Click **Create repository from template**. Check that the address bar now shows **your account**, not the instructor's account.
@@ -46,18 +48,18 @@ Click **Create repository from template**. Check that the address bar now shows 
 In your repository:
 
 1. Open **Settings → Pages**.
-2. Under the publishing source controls, select **GitHub Actions**. The kit already contains a workflow; you do not need to create a second one.
+2. Under **Build and deployment**, set **Source: GitHub Actions**. Do not choose **Deploy from a branch** or a `main / (root)` branch-and-folder combination. The kit already contains a workflow; you do not need to create a second one.
 3. Open the **Actions** tab.
 4. Select **Deploy blog** in the workflow list.
 5. Select **Run workflow**, choose `main`, and run it. If you named the default branch differently, use that branch and ask the facilitator to check the workflow's branch setting.
 
 This template supplies a custom workflow to build and deploy the site. GitHub documents [custom Pages workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages) and the [Run workflow control](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow).
 
-The first run may have started before you selected the Pages source. If that run failed, configure the source first and start a new run. Do not edit random workflow settings in response to an error; use the [troubleshooting guide](TROUBLESHOOTING.md).
+The first run may have started before you selected the Pages source. If **Check GitHub Pages setup** fails, open that step or the run's summary and follow its instructions. Change the Pages source yourself, then start a new **Deploy blog** run; the check reports the problem but does not change repository settings for you. Do not edit random workflow settings in response to an error; use the [troubleshooting guide](TROUBLESHOOTING.md).
 
 ### 3. Open your live site
 
-Open the latest workflow run and wait for it to complete successfully. Then return to **Settings → Pages → Visit site**. Save that exact address in your worksheet. A repository address beginning with `github.com/` is the source-code page; your website address normally uses `github.io`.
+Open the latest **Deploy blog** run for your latest commit and wait for it to complete successfully. A separate automatically generated **pages build and deployment** run can appear if branch publishing was enabled; its green mark does not show that this blog was built correctly. Then return to **Settings → Pages → Visit site**. Save that exact address in your worksheet. A repository address beginning with `github.com/` is the source-code page; your website address normally uses `github.io`.
 
 Publishing can take several minutes. Continue planning your introduction while it runs. GitHub notes that publication can take up to ten minutes after a change. [Publishing timing](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)
 
@@ -77,19 +79,32 @@ Download the generated settings file before leaving the page. Form entries are n
 
 To apply it:
 
-1. Ensure the downloaded filename is exactly `site.yml`. Browsers may add a number when the same file has been downloaded before.
+1. Ensure the downloaded filename is exactly `site.yml`. If your browser named it `site (1).yml`, rename it to `site.yml` on your computer before uploading. Do not add `.txt` to the name.
 2. In **your repository**, open the `content` folder.
-3. Choose **Add file → Upload files** and select the downloaded `site.yml`.
+3. Check the folder breadcrumb reads **your repository / content**, then choose **Add file → Upload files** and select the downloaded `site.yml`.
 4. Review the replacement, then **Commit changes** to `main` with a note such as `Personalize homepage`.
 5. Wait for the latest Actions run and refresh the website.
 
-Uploading to the repository's top level creates a different file and will not change the homepage. The correct path is **`content/site.yml`**. A downloaded settings file replaces the **whole settings file**. For later updates, wait for the latest successful deployment, reload your own `/setup/` page, and check that every field shows your current details before changing anything. An old tab or the instructor's studio may contain old or default settings.
+Check the saved file's location:
+
+```text
+Your repository
+└── content
+    └── site.yml       ← correct: the file the blog reads
+
+Your repository
+└── site.yml           ← wrong: uploaded one folder too high
+```
+
+The updated build stops if it finds a misplaced settings file and tells you how to recover. It will not merge or delete your files automatically. If this happens, preserve your desired settings by following [the recovery steps](TROUBLESHOOTING.md#the-build-found-a-misplaced-settings-file).
+
+A downloaded settings file replaces the **whole settings file**. For later updates, wait for the latest successful deployment, reload your own `/setup/` page, and check that every field shows your current details before changing anything. An old tab or the instructor's studio may contain old or default settings.
 
 A commit saves your edit and starts a new build. You can make another independent edit while a build is running; you do not need to wait after every file. At each checkpoint, check the run for your latest commit before judging the live result.
 
 ### Optional: edit settings directly
 
-Open **Code → content → site.yml** in your repository and select the pencil icon. Change text on the right side of each colon and leave the field names unchanged. Keep text between straight double quotes and keep `true` and `false` unquoted. Review the changes and commit to `main`. The studio handles quotation marks for you if you prefer not to edit this format.
+Open **Code → content → site.yml** in your repository and select the pencil icon. Change text on the right side of each colon and leave the field names unchanged. Keep each quoted setting on one line, between straight double quotes, and keep `true` and `false` unquoted. Do not paste a paragraph of AI advice or press Enter in the middle of a quoted headline. Text wrapping on your screen is fine; adding a new line to the file is different. Use the studio for text with quotation marks or multiple paragraphs—it writes the required formatting for you. Review the changes and commit to `main`.
 
 **Checkpoint:** your real name and accurate introduction appear on the live homepage.
 

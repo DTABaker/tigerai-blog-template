@@ -26,6 +26,10 @@ jobs:
         with:
           node-version: '24'
           cache: npm
+      - name: Check GitHub Pages setup
+        run: node scripts/check-pages.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Install the exact dependency versions
         run: npm ci
       - name: Read the GitHub Pages address

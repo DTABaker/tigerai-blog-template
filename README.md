@@ -15,13 +15,13 @@ The shared kit has completed a [GitHub Pages fresh-copy rehearsal](docs/REHEARSA
 
 1. Sign in to GitHub, then open the [shared template](https://github.com/DTABaker/tigerai-blog-template). Choose **Use this template → Create a new repository**. You can also use the [direct create-a-copy link](https://github.com/DTABaker/tigerai-blog-template/generate); GitHub will ask you to sign in if needed.
 2. Create a public repository named `professional-blog`. If that name already exists in your account, choose a new name such as `professional-blog-workshop`. This project-site route gives the workshop its own repository and address; keep any existing personal blog unchanged.
-3. In your new repository, open **Settings → Pages** and select **GitHub Actions** as the publishing source.
-4. Open **Actions → Deploy blog → Run workflow**, select `main`, and start the workflow. After it succeeds, open **Settings → Pages → Visit site**.
+3. In your new repository, open **Settings → Pages → Build and deployment** and set **Source: GitHub Actions**. Do not choose **Deploy from a branch** or `main / (root)`. The publishing workflow is already included; you do not need to add another one.
+4. Open **Actions → Deploy blog → Run workflow**, select `main`, and start the workflow. Check the latest **Deploy blog** run, not a separate automatically generated Pages run. If **Check GitHub Pages setup** fails, follow its repair instructions, then start a new run. After Deploy blog succeeds, open **Settings → Pages → Visit site**.
 5. Open **Workshop** on your own live site and follow its guide. Use your own site's personalization studio to create settings and a first post, then upload those files to your repository. Finish the launch checklist when your introduction, About, Résumé, and first post are ready.
 
 Keep this README open in one tab and your own repository in another. A **repository** is your site's folder on GitHub. A **commit** is a saved version. An **Action** builds your site from the files you edit. **GitHub Pages** hosts the resulting website. [GitHub's template guide](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) describes making your own copy.
 
-Your project-site address normally looks like `https://YOUR-USERNAME.github.io/professional-blog/`; use the exact address shown in Settings → Pages. An optional advanced route uses `YOUR-USERNAME.github.io` as the repository name to host at the account's root address. Only use that route when the repository does not already exist and your facilitator has separately rehearsed it; it is outside the recommended live workshop path.
+Your project-site address normally looks like `https://YOUR-USERNAME.github.io/professional-blog/`; copy the exact address shown in Settings → Pages. **A hyphen in your GitHub username is fine.** Keep it in the address, and preserve the repository path and its letter case. For example, the address shape `https://gloria-obeng.github.io/Tigers-AI-Test/` includes both the username's hyphen and the project's name. An optional advanced route uses `YOUR-USERNAME.github.io` as the repository name to host at the account's root address. Only use that route when the repository does not already exist and your facilitator has separately rehearsed it; it is outside the recommended live workshop path.
 
 ## The files you will edit
 
@@ -37,6 +37,8 @@ Your project-site address normally looks like `https://YOUR-USERNAME.github.io/p
 
 The main workshop route uses **your own published site's `/setup/` page** to generate a settings file and a new post. GitHub's pencil button lets you edit the downloaded post after uploading it, and you can also edit settings directly. **The setup form does not update GitHub or publish anything.** Upload the downloaded file into the correct folder of your own repository and commit the change.
 
+For settings, open the **content** folder before choosing **Add file → Upload files**. The result must be **`content/site.yml`**. A top-level `site.yml` or a browser-renamed `site (1).yml` is a different file. Rename the download to exactly `site.yml` before uploading. The updated build stops and explains misplaced settings files instead of silently ignoring them; it does not choose which version to keep. [Recover a misplaced download](docs/TROUBLESHOOTING.md#the-build-found-a-misplaced-settings-file).
+
 For later settings changes, wait for the latest successful deployment, reload your own `/setup/` page, and check that it shows your current details. A downloaded `site.yml` replaces the complete settings file. Using the instructor's studio or an old open tab can restore its defaults over your changes.
 
 ## Your workshop materials
@@ -45,6 +47,7 @@ For later settings changes, wait for the latest successful deployment, reload yo
 - [Participant worksheet](docs/WORKSHEET.md): a short planning sheet and launch checklist.
 - [Customization guide](docs/CUSTOMIZE.md): every setting, Markdown examples, images, tags, and publishing switches.
 - [Troubleshooting](docs/TROUBLESHOOTING.md): what to inspect when something goes wrong.
+- [Update an existing copy](docs/TROUBLESHOOTING.md#update-an-existing-copy-with-these-fixes): earlier copies do not receive template fixes automatically.
 - [AI helper prompts](docs/AI-PROMPTS.md): optional editing help that preserves your voice and factual accuracy.
 - [Facilitator guide](docs/FACILITATOR.md): preparation and a 90-minute teaching plan.
 - [Provenance and scope](docs/PROVENANCE.md): design inspiration, primary documentation, and what this kit does.
